@@ -127,4 +127,4 @@ def gds_to_bin(xml_path, bin_path):
 
 
 if __name__ == '__main__':
-    gds_to_bin(xml_path="datasets\\xml_logs", bin_path="datasets\\gds\\training")
+    gds_to_bin(xml_path="xml_logs", bin_path="datasets\\gds\\training")
