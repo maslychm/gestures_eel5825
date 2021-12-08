@@ -1,3 +1,7 @@
+/datasets/
+/xml_logs/
+xml.zip
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

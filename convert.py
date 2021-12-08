@@ -4,9 +4,7 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 from dataset import Dataset, Sample
 import errno
-import tables
 import numpy as np
-from draw import draw_pts
 
 
 def xml_gesture_to_sample(fopen, gname, subject_name, pid):
@@ -15,7 +13,8 @@ def xml_gesture_to_sample(fopen, gname, subject_name, pid):
     trajectory = []
     time_s = []
     for child in root:
-        x, y, t = int(child.attrib["X"]), int(child.attrib["Y"]), int(child.attrib["T"])
+        x, y, t = int(child.attrib["X"]), int(
+            child.attrib["Y"]), int(child.attrib["T"])
         trajectory.append([x, y])
         time_s.append(t)
     time_s = [time - time_s[0] for time in time_s]
@@ -75,17 +74,18 @@ def prettify(elem):
     return reparsed.toprettyxml(indent="  ")
 
 
-def gds_to_bin():
+def gds_to_bin(xml_path, bin_path):
     """
     Load and convert original GDS dataset to the format read by our dataset reader
     """
 
-    opath = os.path.join(os.curdir, "..\\datasets\\xml_logs")  # Original Path
-    tpath = os.path.join(os.curdir, "..\\datasets\\gds_bin\\training")  # Target Path
+    opath = os.path.join(os.curdir, xml_path)
+    tpath = os.path.join(os.curdir, bin_path)
 
     print(f"Looking for gestures in {opath}")
     pid = -1
     for subject_name in next(os.walk(opath))[1]:
+        print(f"Converting samples for subject {pid}")
         pid += 1
         subject_path = os.path.join(opath, subject_name)
         seen_sample_names = {}
@@ -107,11 +107,13 @@ def gds_to_bin():
 
                     # read the xml sample
                     fopen = os.path.join(pace_path, filename)
-                    sample = xml_gesture_to_sample(fopen, gname, subject_name, pid)
+                    sample = xml_gesture_to_sample(
+                        fopen, gname, subject_name, pid)
 
                     # write the binary sample
                     folder_path = f"{tpath}\\Sub_U0{subject_name[-2:]}\\{gname}"
-                    fpath = os.path.join(folder_path, f"ex_{seen_sample_names[gname]}")
+                    fpath = os.path.join(
+                        folder_path, f"ex_{seen_sample_names[gname]}")
 
                     try:
                         os.makedirs(os.path.dirname(fpath))
@@ -125,5 +127,4 @@ def gds_to_bin():
 
 
 if __name__ == '__main__':
-    gds_to_bin()
-
+    gds_to_bin(xml_path="datasets\\xml_logs", bin_path="datasets\\gds\\training")

@@ -98,17 +98,13 @@ class Dataset(object):
             path,
             criteria={}):
         """ """
-        #
         # Get path to dataset if not specified.
-        #
         if not os.path.exists(path):
             tmp = Dataset.Path(".")
-            # print(tmp)
             assert tmp is not None
             path = tmp + '/' + path
-        #
+
         # Validate input.
-        #
         assert os.path.exists(path)
         assert os.path.isdir(path)
 
@@ -116,10 +112,10 @@ class Dataset(object):
         # Setup criteria...
         # Note, 'g'=gesture and 's'=subject
         #
-        gexclude = criteria.get('gexclude', [])
-        ginclude = criteria.get('ginclude', [])
-        sexclude = criteria.get('sexclude', [])
-        sinclude = criteria.get('sinclude', [])
+        # gexclude = criteria.get('gexclude', [])
+        # ginclude = criteria.get('ginclude', [])
+        # sexclude = criteria.get('sexclude', [])
+        # sinclude = criteria.get('sinclude', [])
 
         pid = 0
         samples = []
@@ -129,22 +125,22 @@ class Dataset(object):
             if not os.path.isdir(spath):
                 continue
 
-            if sname in sexclude:
-                continue
+            # if sname in sexclude:
+                # continue
 
-            if len(sinclude) and sname not in sinclude:
-                continue
+            # if len(sinclude) and sname not in sinclude:
+                # continue
 
             # print("Load", sname)
 
             for gname in os.listdir(spath):
 
                 gpath = spath + "/" + gname
-                if gname in gexclude:
-                    continue
+                # if gname in gexclude:
+                # continue
 
-                if len(ginclude) and gname not in ginclude:
-                    continue
+                # if len(ginclude) and gname not in ginclude:
+                # continue
 
                 if not os.path.isdir(gpath):
                     continue
@@ -264,11 +260,6 @@ class Dataset(object):
                 test.extend(RS(samples, 1))
 
         return train, test
-
-    def run_filter(self):
-        for sample in self.samples:
-            r = utils.get_cma_r(30.0, 3.0)
-            sample.trajectory = utils.rcma(sample.trajectory, 1, r)
 
 
 class Sample(object):
